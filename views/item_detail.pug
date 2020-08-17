@@ -1,0 +1,36 @@
+extends layouts/default.pug
+
+block content
+    .container
+        nav.navbar.navbar-expand-lg.bg-nav-head
+            span.navbar-brand.mb-0.h1=data.name
+            button(class='navbar-toggler text-white' type='button' data-toggle='collapse' data-target='#header-support')
+                i.fa.fa-cog
+            .collapse.navbar-collapse#header-support
+                ul.navbar-nav.ml-auto
+                    li.nav-item
+                        a(class='nav-link btn btn-warning btn-sm mr-md-3' href='javascript.void(0);' data-toggle='modal' data-target='#edit-modal')
+                            i.fa.fa-pencil-square-o
+                    .dropdown-divider.my-3
+                    li.nav-item
+                        a(class='nav-link btn btn-danger btn-sm' href=`/item/delete/${data._id}`)
+                            i.fa.fa-trash
+        .row.mt-2
+            .col-sm-12
+                img(src=data.image_link class='img-fluid img-thumbnail' alt='No Photo')
+    
+    .modal.fade#edit-modal(data-backdrop='static' data-keyboard='false' tabIndex='1')
+        .modal-dialog.modal-dialog-centered.modal-dialog-scrollable
+            .modal-content.bg-nav-head
+                .modal-header
+                    h5.modal-title EDIT ITEM
+                    button(type='button' class='close text-white' data-dismiss='modal')
+                        span &times;
+                form(action=`/item/${data._id}/edit` method='POST')
+                    .modal-body
+                        .form-group
+                            input(type='text' class='form-control' name='name' value=`${data.name}` placeholder='Name' required)
+                        .form-group
+                            input(type='text' class='form-control' name='image_link' value=`${data.image_link}` placeholder='Image Link (Safe Only')
+                    .modal-footer
+                        button(type='submit' class='btn btn-block btn-success') SUBMIT CHANGE

@@ -1,0 +1,98 @@
+extends layouts/default.pug
+
+block content
+    .container
+        .row.justify-content-center
+            .col-sm-12
+                if session.success
+                    .alert.alert-success #{session.success}
+                        button(type='button' class='close' data-dismiss='alert')
+                            span &times;
+                if session.error
+                    .alert.alert-danger #{session.error}
+                        button(type='button' class='close' data-dismiss='alert')
+                            span &times;
+                .sticky-top
+                    .form-group
+                        select.form-control#filter
+                            option(value='0') All
+                            option(value='1') Recently Viewed
+                            option(value='2') Most Hits 
+                    .form-group
+                        input(type='text' id='search' class='form-control' placeholder='Search')
+                ul.list-unstyled#media-list
+                    //- each row in data
+                    //-     a(href=`item/${row._id}`)
+                    //-         li.media.bg-media.p-3.mb-2
+                    //-             img(src=row.image_link alt='No Photo' height='75')
+                    //-             .media-body
+                    //-                 h5.ml-2=row.name
+
+block script
+    script.
+
+        const mediaList = $('#media-list');
+        const search = $('#search');
+
+        async function getData(url='',param='') {
+            const response = await fetch(url+param, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            });
+
+            return response.json();
+        }             
+
+        function repopulateList(items,div) {
+            div.empty()
+            $.each(items, function(i,item){
+                const markup = `
+                    <a href="item/${item._id}">
+                        <li class="media bg-media p-3 mb-2">
+                            <img src="${item.image_link}" alt="No Photo" width ="75" height="75">
+                            <div class="media-body">
+                                <h5 class="ml-2">${item.name}</h5>
+                                <i class="fa fa-eye ml-2"></i> ${item.hit}
+                            </div>
+                        </li>
+                    </a>
+                `;
+                div.append(markup);
+            });
+        }
+
+        function filterList(value) {
+            let input = value.toUpperCase();
+            $("#media-list a ").filter(function(){
+                $(this).toggle($(this).text().toUpperCase().indexOf(input) > -1);
+            });
+            
+        }
+
+        $(document).ready(function(){
+
+            getData('item/filter/','0')
+                .then(resp => {
+                    repopulateList(resp, mediaList);
+                });
+
+
+            $('#filter').on('change', function(){
+                let filter = $(this).val();
+                getData('item/filter/',filter)
+                    .then(resp => {
+                        console.log(resp);
+                        repopulateList(resp, mediaList);
+                    });
+            });
+
+            search.on('keyup', function(){
+                let val = $(this).val();
+                filterList(val);
+            });
+        });
+                   
+                

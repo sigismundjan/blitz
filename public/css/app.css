@@ -1,0 +1,21 @@
+.bg-dark {
+    background-color: #222222;
+    color: white;
+}
+
+.bg-bluedark {
+    background-color: #00467f;
+    color: white;
+}
+.bg-media {
+    background-color: #36454F;
+    color: white;
+}
+.bg-media:hover {
+    background-color: #00467f;
+    color: white;
+}
+.bg-nav-head {
+    background-color: #36454F;
+    color: white;
+}

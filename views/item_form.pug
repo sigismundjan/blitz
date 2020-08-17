@@ -1,0 +1,14 @@
+extends layouts/default.pug
+
+block content
+    .container
+        .row
+            .col-sm-12
+                h3.text-center.text-white ADD ITEM
+                hr
+                form(action="item" method='POST')
+                    .form-group
+                        input(class='form-control' type='text' name='name' placeholder='Name' required)
+                    .form-group
+                        input(class='form-control' type='text' name='image_link' placeholder='Image Link (Safe Only')
+                    button(class='btn btn-block btn-success' type='submit') ADD
